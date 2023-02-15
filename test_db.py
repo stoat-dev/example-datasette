@@ -28,14 +28,14 @@ def test_database_content(test_db):
     cur.execute("SELECT COUNT(*) FROM users WHERE name = %s AND email = %s", ("John Doe", "johndoe@example.com"))
     assert cur.fetchone()[0] == 1
 
+    # force failure so we can test stoat functionality of reading the dumped db
+    assert false
+
     # delete the user and ensure that the users table is empty again
     cur.execute("DELETE FROM users WHERE name = %s", ("John Doe",))
     test_db.commit()
     cur.execute("SELECT COUNT(*) FROM users")
     assert cur.fetchone()[0] == 0
-
-    # force failure so we can test stoat functionality of reading the dumped db
-    assert false
 
     # close the cursor
     cur.close()
