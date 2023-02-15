@@ -38,7 +38,7 @@ jobs:
           python -m pytest
 
       - name: Export DB on Failure
-        if: !success()
+        if: ${{ failure() }}
         env:
           DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
         run: |
