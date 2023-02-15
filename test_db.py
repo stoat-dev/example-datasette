@@ -34,5 +34,8 @@ def test_database_content(test_db):
     cur.execute("SELECT COUNT(*) FROM users")
     assert cur.fetchone()[0] == 0
 
+    # force failure so we can test stoat functionality of reading the dumped db
+    assert false
+
     # close the cursor
     cur.close()

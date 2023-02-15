@@ -1,0 +1,10 @@
+---
+version: 1
+enabled: true
+comment_template_file: ".stoat/comment.hbs"
+plugins:
+  job_runtime:
+    enabled: true
+  static_hosting:
+    postgres_dump:
+      path: postgres.db

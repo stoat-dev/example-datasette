@@ -36,3 +36,16 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         run: |
           python -m pytest
+
+      - name: Export DB on Failure
+        if: !success()
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: |
+          pip install 'db-to-sqlite[postgresql]'
+          db-to-sqlite "$DATABASE_URL" postgres.db --all
+
+      - name: Run Stoat Action
+        uses: stoat-dev/stoat-action@v0
+        if: always()
+
