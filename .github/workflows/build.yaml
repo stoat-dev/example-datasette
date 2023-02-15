@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      db:
+      postgres:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
@@ -33,14 +33,14 @@ jobs:
 
       - name: Test
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
         run: |
           python -m pytest
 
       - name: Export DB on Failure
         if: !success()
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
         run: |
           pip install 'db-to-sqlite[postgresql]'
           db-to-sqlite "$DATABASE_URL" postgres.db --all
