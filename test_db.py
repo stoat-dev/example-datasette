@@ -15,24 +15,32 @@ def test_database_content(test_db):
 
     # create table
     cur.execute("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL)");
+    cur.execute("CREATE TABLE IF NOT EXISTS companies (id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL)");
 
     # ensure that the users table is empty
     cur.execute("SELECT COUNT(*) FROM users")
     assert cur.fetchone()[0] == 0
 
-    # insert a new user
-    cur.execute("INSERT INTO users (name, email) VALUES (%s, %s)", ("John Doe", "johndoe@example.com"))
+    # insert new users
+    cur.execute("INSERT INTO users (name, email) VALUES (%s, %s)", ("John", "johndoe@example.com"))
+    cur.execute("INSERT INTO users (name, email) VALUES (%s, %s)", ("Jared", "jared@example.com"))
+    cur.execute("INSERT INTO users (name, email) VALUES (%s, %s)", ("Liren", "liren@example.com"))
+    test_db.commit()
+
+    # insert new companies
+    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Google"))
+    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Facebook"))
     test_db.commit()
 
     # retrieve all users and validate that the new user is in the table
-    cur.execute("SELECT COUNT(*) FROM users WHERE name = %s AND email = %s", ("John Doe", "johndoe@example.com"))
+    cur.execute("SELECT COUNT(*) FROM users WHERE name = %s AND email = %s", ("John", "johndoe@example.com"))
     assert cur.fetchone()[0] == 1
 
     # force failure so we can test stoat functionality of reading the dumped db
     assert false
 
     # delete the user and ensure that the users table is empty again
-    cur.execute("DELETE FROM users WHERE name = %s", ("John Doe",))
+    cur.execute("DELETE FROM users WHERE name = %s", ("John",))
     test_db.commit()
     cur.execute("SELECT COUNT(*) FROM users")
     assert cur.fetchone()[0] == 0
