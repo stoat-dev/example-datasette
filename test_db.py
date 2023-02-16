@@ -16,6 +16,7 @@ def test_database_content(test_db):
     # create table
     cur.execute("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL)");
     cur.execute("CREATE TABLE IF NOT EXISTS companies (id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL)");
+    cur.execute("TRUNCATE users, companies");
 
     # ensure that the users table is empty
     cur.execute("SELECT COUNT(*) FROM users")
@@ -28,8 +29,8 @@ def test_database_content(test_db):
     test_db.commit()
 
     # insert new companies
-    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Google"))
-    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Facebook"))
+    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Google",))
+    cur.execute("INSERT INTO companies (name) VALUES (%s)", ("Facebook",))
     test_db.commit()
 
     # retrieve all users and validate that the new user is in the table
